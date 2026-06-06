@@ -1,0 +1,12 @@
+# Arquivo de exemplo com endereços de memória
+# Aceita hexadecimal com 0x e decimal.
+# Linhas vazias e comentários iniciados por # são ignorados.
+
+0x0010
+0x0024
+0x0010
+256
+0x00FF
+0x0110
+0x0210
+0x0010
