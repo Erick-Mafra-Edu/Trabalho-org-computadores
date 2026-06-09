@@ -17,6 +17,9 @@ func TestCalculateAddressFields(t *testing.T) {
 	if fields.Binary != "0001001010100101" {
 		t.Fatalf("binário incorreto: %s", fields.Binary)
 	}
+	if fields.TagBits != "00010010" || fields.IndexBits != "1010" || fields.OffsetBits != "0101" {
+		t.Fatalf("particionamento incorreto: tag=%s index=%s offset=%s", fields.TagBits, fields.IndexBits, fields.OffsetBits)
+	}
 }
 
 func TestSimulateDirectMappingCountsHitsAndMisses(t *testing.T) {

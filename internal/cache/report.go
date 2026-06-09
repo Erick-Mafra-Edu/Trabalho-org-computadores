@@ -7,10 +7,10 @@ import (
 
 func PrintBitLayout(out io.Writer, layout BitLayout) {
 	fmt.Fprintln(out)
-	fmt.Fprintln(out, "Campos do endereço:")
-	fmt.Fprintf(out, "Tag Bits: %d\n", layout.TagBits)
-	fmt.Fprintf(out, "Index Bits: %d\n", layout.IndexBits)
-	fmt.Fprintf(out, "Offset Bits: %d\n", layout.OffsetBits)
+	fmt.Fprintln(out, "Particionamento do endereço:")
+	fmt.Fprintf(out, "OFFSET(bits): %d\n", layout.OffsetBits)
+	fmt.Fprintf(out, "Index(bits): %d\n", layout.IndexBits)
+	fmt.Fprintf(out, "TAG(bits): %d\n", layout.TagBits)
 	fmt.Fprintln(out)
 }
 
@@ -23,9 +23,17 @@ func printVerboseAccess(out io.Writer, fields AddressFields, hit bool, cacheMemo
 	fmt.Fprintln(out, "------------------------")
 	fmt.Fprintf(out, "Endereço original: %s\n", fields.Original)
 	fmt.Fprintf(out, "Endereço binário:  %s\n", fields.Binary)
+	fmt.Fprintf(out, "Particionamento: TAG=%s | Index=%s | OFFSET=%s\n", printableBits(fields.TagBits), printableBits(fields.IndexBits), printableBits(fields.OffsetBits))
 	fmt.Fprintf(out, "Tag: %d | Index: %d | Offset: %d\n", fields.Tag, fields.Index, fields.Offset)
 	fmt.Fprintf(out, "Resultado: %s\n", status)
 	PrintCacheState(out, cacheMemory)
+}
+
+func printableBits(bits string) string {
+	if bits == "" {
+		return "-"
+	}
+	return bits
 }
 
 // PrintCacheState imprime todos os conjuntos e linhas armazenados no momento da simulação.
@@ -60,9 +68,9 @@ func GenerateReport(out io.Writer, result SimulationResult) {
 	fmt.Fprintf(out, "Block Size: %d bytes\n", result.Config.BlockSize)
 	fmt.Fprintf(out, "Associatividade: %d\n", result.Config.Associativity)
 	fmt.Fprintf(out, "Política: %s\n", result.Config.Policy)
-	fmt.Fprintf(out, "Tag Bits: %d\n", result.Layout.TagBits)
-	fmt.Fprintf(out, "Index Bits: %d\n", result.Layout.IndexBits)
-	fmt.Fprintf(out, "Offset Bits: %d\n", result.Layout.OffsetBits)
+	fmt.Fprintf(out, "OFFSET(bits): %d\n", result.Layout.OffsetBits)
+	fmt.Fprintf(out, "Index(bits): %d\n", result.Layout.IndexBits)
+	fmt.Fprintf(out, "TAG(bits): %d\n", result.Layout.TagBits)
 
 	fmt.Fprintln(out)
 	fmt.Fprintln(out, "========================")

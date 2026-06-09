@@ -324,7 +324,7 @@ O modo verbose pode ser ativado ao selecionar o arquivo. Quando ativo, cada aces
 
 ## Arquivos de Entrada
 
-Dois arquivos de teste acompanham o projeto:
+Alguns arquivos de teste acompanham o projeto, por exemplo:
 
 - `teste1.txt`: sequência simples para mapeamento direto.
 - `teste2.txt`: sequência para cache associativa por conjunto.

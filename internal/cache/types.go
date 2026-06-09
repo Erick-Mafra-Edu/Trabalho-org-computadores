@@ -1,6 +1,6 @@
 package cache
 
-//  representa a estratégia usada quando um conjunto cheio precisa receber uma nova linha.
+// representa a estratégia usada quando um conjunto cheio precisa receber uma nova linha.
 type ReplacementPolicy string
 
 const (
@@ -8,7 +8,7 @@ const (
 	PolicyFIFO ReplacementPolicy = "FIFO"
 )
 
-//  agrupa todos os parâmetros necessários para configurar a simulação da cache.
+// agrupa todos os parâmetros necessários para configurar a simulação da cache.
 type Config struct {
 	CacheSize     uint64
 	BlockSize     uint64
@@ -19,7 +19,7 @@ type Config struct {
 	Verbose       bool
 }
 
-//  guarda a quantidade de bits usada por cada campo do endereço.
+// guarda a quantidade de bits usada por cada campo do endereço.
 type BitLayout struct {
 	TagBits    uint
 	IndexBits  uint
@@ -28,14 +28,17 @@ type BitLayout struct {
 	NumSets    uint64
 }
 
-//  guarda o endereço decomposto usado na busca da cache.
+// guarda o endereço decomposto usado na busca da cache.
 type AddressFields struct {
-	Original string
-	Value    uint64
-	Binary   string
-	Tag      uint64
-	Index    uint64
-	Offset   uint64
+	Original   string
+	Value      uint64
+	Binary     string
+	TagBits    string
+	IndexBits  string
+	OffsetBits string
+	Tag        uint64
+	Index      uint64
+	Offset     uint64
 }
 
 // representa uma linha dentro de um conjunto da cache.

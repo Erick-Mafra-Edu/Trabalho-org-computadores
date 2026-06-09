@@ -30,15 +30,28 @@ func CalculateAddressFields(input addressInput, layout BitLayout, addrBits uint)
 		indexMask = (uint64(1) << layout.IndexBits) - 1
 	}
 
+	binary := addressBinary(value, addrBits)
+	tagBits, indexBits, offsetBits := partitionAddressBinary(binary, layout)
+
 	fields := AddressFields{
-		Original: input.Raw,
-		Value:    value,
-		Binary:   addressBinary(value, addrBits),
-		Offset:   value & offsetMask,
-		Index:    (value >> layout.OffsetBits) & indexMask,
-		Tag:      value >> (layout.OffsetBits + layout.IndexBits),
+		Original:   input.Raw,
+		Value:      value,
+		Binary:     binary,
+		TagBits:    tagBits,
+		IndexBits:  indexBits,
+		OffsetBits: offsetBits,
+		Offset:     value & offsetMask,
+		Index:      (value >> layout.OffsetBits) & indexMask,
+		Tag:        value >> (layout.OffsetBits + layout.IndexBits),
 	}
 	return fields, nil
+}
+
+func partitionAddressBinary(binary string, layout BitLayout) (string, string, string) {
+	tagEnd := int(layout.TagBits)
+	indexEnd := tagEnd + int(layout.IndexBits)
+
+	return binary[:tagEnd], binary[tagEnd:indexEnd], binary[indexEnd:]
 }
 
 // SimulateDirectMapping executa a simulação de cache com mapeamento direto.
