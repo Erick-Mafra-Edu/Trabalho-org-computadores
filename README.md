@@ -1,3 +1,9 @@
+#Alunos
+
+Rodrigo Buratto Ribas
+Erick Marlon Mafra
+Daniel Uesler Brito
+
 # Simulador de Memória Cache
 
 Projeto em Go que simula o comportamento de uma memória cache com mapeamento direto e mapeamento por conjunto, conforme a prática M3 de Organização de Computadores.
@@ -328,6 +334,7 @@ Alguns arquivos de teste acompanham o projeto, por exemplo:
 
 - `teste1.txt`: sequência simples para mapeamento direto.
 - `teste2.txt`: sequência para cache associativa por conjunto.
+- `teste4.txt`: sequência com muitos conflitos para observar substituições na mesma linha/conjunto.
 - `acessos_exemplo.txt`: arquivo simples de exemplo para usar no menu.
 - `entrada_menu_exemplo.txt`: respostas prontas para testar o menu automaticamente.
 
@@ -343,6 +350,10 @@ Formato aceito:
 
 Cada linha deve conter um endereço decimal ou hexadecimal com prefixo `0x`.
 
+
+
+O arquivo `entrada_menu_exemplo.txt` não deve ter comentários, porque cada linha é lida como se o usuário tivesse digitado uma opção no menu.
+
 Para testar rapidamente usando os arquivos de exemplo:
 
 ```bash
@@ -353,9 +364,7 @@ Ou, após compilar:
 
 ```bash
 ./cache-sim < entrada_menu_exemplo.txt
-```
-
-O arquivo `entrada_menu_exemplo.txt` não deve ter comentários, porque cada linha é lida como se o usuário tivesse digitado uma opção no menu.
+``` 
 
 ## Políticas de Substituição
 
@@ -382,27 +391,52 @@ tag_bits = addr_bits - index_bits - offset_bits
 Resultados esperados:
 
 | Cache | Bloco | Associatividade | Endereço | Offset | Index | Tag |
-| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 256 | 16 | 1 | 16 bits | 4 | 4 | 8 |
-| 1024 | 32 | 2-way | 16 bits | 5 | 4 | 7 |
-| 512 | 8 | 4-way | 16 bits | 3 | 4 | 9 |
-| 2048 | 64 | 8-way | 32 bits | 6 | 2 | 24 |
+| ---:  | ---:  | ---:            | ---:     | ---:   | ---:  | ---:|
+| 256   | 16    | 1               | 16 bits  | 4      | 4     | 8   |
+| 1024  | 32    | 2-way           | 16 bits  | 5      | 4     | 7   |
+| 512   | 8     | 4-way           | 16 bits  | 3      | 4     | 9   |
+| 2048  | 64    | 8-way           | 32 bits  | 6      | 2     | 24  |
 
-## Checklist de Requisitos
 
-- [x] Linguagem Go.
-- [x] Estrutura modular com `cmd` e `internal/cache`.
-- [x] Menu interativo no terminal.
-- [x] Leitura de arquivo com endereços.
-- [x] Suporte a decimal e hexadecimal.
-- [x] Comentários iniciados por `#` e linhas vazias ignorados.
-- [x] Mapeamento direto.
-- [x] Mapeamento associativo por conjunto.
-- [x] Política LRU.
-- [x] Política FIFO.
-- [x] Modo verbose.
-- [x] Cálculo automático de tag, index e offset.
-- [x] Relatório final com configuração e resultados.
-- [x] Validações obrigatórias.
-- [x] Arquivos `teste1.txt` e `teste2.txt`.
-- [x] Testes unitários.
+### Exemplos com `teste4.txt`
+
+O arquivo `teste4.txt` contem uma sequencia com muitos conflitos. Use a mesma configuracao do exemplo do PDF e responda `n` ou `s` ao selecionar o arquivo.
+
+Linux/macOS:
+
+```bash
+printf '1\n256\n2\n16\n3\n1\n4\n16\n5\n1\n6\nteste4.txt\nn\n7\n0\n' | GOCACHE=/tmp/go-build-cache go run -buildvcs=false ./cmd/cache-sim
+```
+
+Saida resumida:
+
+```text
+Particionamento do endereco:
+OFFSET(bits): 4
+Index(bits): 4
+TAG(bits): 8
+...
+Total de Acessos: 20
+Hits: 0
+Misses: 20
+Taxa de Hit (%): 0.00
+Taxa de Miss (%): 100.00
+```
+
+Em modo verbose:
+
+```bash
+printf '1\n256\n2\n16\n3\n1\n4\n16\n5\n1\n6\nteste4.txt\ns\n7\n0\n' | GOCACHE=/tmp/go-build-cache go run -buildvcs=false ./cmd/cache-sim
+```
+
+Trecho:
+
+```text
+Particionamento do endereco:
+OFFSET(bits): 4
+Index(bits): 4
+TAG(bits): 8
+------------------------
+Endereco original: 0x0000
+...
+```
