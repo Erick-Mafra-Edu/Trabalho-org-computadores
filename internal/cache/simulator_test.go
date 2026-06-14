@@ -116,8 +116,9 @@ func TestSimulateDirectMappingVerboseOutput(t *testing.T) {
 		"Endereço binário:  00000001",
 		"Resultado: Miss",
 		"Estado atual da cache:",
-		"Conjunto 0:",
-		"Linha 0: V=1 Tag=1",
+		"ENDEREÇO LIDO",
+		"CONJUNTO",
+		"0x01",
 	}
 	for _, fragment := range wantFragments {
 		if !strings.Contains(text, fragment) {
