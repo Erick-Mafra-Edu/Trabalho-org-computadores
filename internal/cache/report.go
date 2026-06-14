@@ -48,7 +48,7 @@ func PrintCacheState(out io.Writer, cacheMemory Cache, currentAddress ...string)
 	}
 
 	table := tablewriter.NewWriter(out)
-	table.SetHeader([]string{"Endereço lido", "Conjunto", "Linha", "V", "Tag", "LastUsed", "LoadedAt"})
+	table.SetHeader([]string{"Endereço lido", "Conjunto", "Linha", "Tag", "LastUsed", "LoadedAt"})
 	table.SetAlignment(tablewriter.ALIGN_CENTER)
 	table.SetHeaderAlignment(tablewriter.ALIGN_CENTER)
 
@@ -57,9 +57,7 @@ func PrintCacheState(out io.Writer, cacheMemory Cache, currentAddress ...string)
 			tag := "-"
 			lastUsed := "-"
 			loadedAt := "-"
-			valid := "0"
 			if line.Valid {
-				valid = "1"
 				tag = strconv.FormatUint(line.Tag, 10)
 				lastUsed = strconv.FormatUint(line.LastUsed, 10)
 				loadedAt = strconv.FormatUint(line.LoadedAt, 10)
@@ -68,7 +66,6 @@ func PrintCacheState(out io.Writer, cacheMemory Cache, currentAddress ...string)
 				address,
 				strconv.Itoa(setIndex),
 				strconv.Itoa(lineIndex),
-				valid,
 				tag,
 				lastUsed,
 				loadedAt,
