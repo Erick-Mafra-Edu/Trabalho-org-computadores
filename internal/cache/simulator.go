@@ -3,8 +3,10 @@ package cache
 import (
 	"fmt"
 	"io"
-	"strconv"
+	"time"
 )
+
+const verboseAccessDelay = 350 * time.Millisecond
 
 func newCache(config Config, layout BitLayout) Cache {
 	sets := make([]CacheSet, layout.NumSets)
@@ -16,7 +18,7 @@ func newCache(config Config, layout BitLayout) Cache {
 
 // CalculateAddressFields decompõe um endereço físico em tag, index e offset.
 func CalculateAddressFields(input addressInput, layout BitLayout, addrBits uint) (AddressFields, error) {
-	value, err := strconv.ParseUint(input.Raw, 0, 64)
+	value, err := parseAddressValue(input.Raw)
 	if err != nil {
 		return AddressFields{}, fmt.Errorf("endereço inválido na linha %d: %q", input.Line, input.Raw)
 	}
@@ -68,7 +70,7 @@ func simulate(config Config, layout BitLayout, addresses []addressInput, out io.
 	cacheMemory := newCache(config, layout)
 	result := SimulationResult{Config: config, Layout: layout}
 
-	for _, input := range addresses {
+	for i, input := range addresses {
 		fields, err := CalculateAddressFields(input, layout, config.AddressBits)
 		if err != nil {
 			return result, err
@@ -83,6 +85,9 @@ func simulate(config Config, layout BitLayout, addresses []addressInput, out io.
 
 		if config.Verbose {
 			printVerboseAccess(out, fields, hit, cacheMemory)
+			if i < len(addresses)-1 {
+				time.Sleep(verboseAccessDelay)
+			}
 		}
 	}
 
